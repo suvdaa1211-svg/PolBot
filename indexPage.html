@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Монгол Улсын Цагдаагийн Байгууллага</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    :root {
+      --police-blue: #0b3a82;
+      --police-blue-dark: #072a5e;
+      --police-gold: #d4af37;
+      --police-gold-soft: #f2d675;
+      --white: #ffffff;
+      --bg: #eef3fb;
+      --text: #1b2b4b;
+      --muted: #5f6f8f;
+      --shadow: 0 18px 45px rgba(9, 36, 79, 0.18);
+      --radius: 22px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(212, 175, 55, 0.18), transparent 30%),
+        radial-gradient(circle at top right, rgba(11, 58, 130, 0.12), transparent 28%),
+        linear-gradient(180deg, #f7faff 0%, #eef3fb 100%);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+    }
+
+    .wrap {
+      width: 100%;
+      max-width: 460px;
+    }
+
+    .card {
+      position: relative;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.96);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(11, 58, 130, 0.08);
+      backdrop-filter: blur(8px);
+    }
+
+    .top-bar {
+      height: 8px;
+      background: linear-gradient(90deg, var(--police-gold), var(--police-blue), var(--police-gold-soft));
+    }
+
+    .content {
+      padding: 28px 22px 24px;
+      position: relative;
+    }
+
+    .seal {
+      width: 82px;
+      height: 82px;
+      margin: 0 auto 14px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #1a4ea1 0%, var(--police-blue) 55%, var(--police-blue-dark) 100%);
+      border: 4px solid rgba(212, 175, 55, 0.95);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 22px rgba(11, 58, 130, 0.22);
+      color: #fff;
+      font-size: 34px;
+      user-select: none;
+    }
+
+    .title {
+      text-align: center;
+      margin: 0;
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--police-blue-dark);
+      line-height: 1.3;
+    }
+
+    .subtitle {
+      text-align: center;
+      margin: 10px 0 0;
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+
+    .divider {
+      width: 82px;
+      height: 4px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--police-gold), var(--police-blue));
+      margin: 18px auto 22px;
+    }
+
+    .button-group {
+      display: grid;
+      gap: 14px;
+    }
+
+    .action-btn {
+      width: 100%;
+      border: 0;
+      border-radius: 18px;
+      padding: 16px 16px;
+      color: #fff;
+      cursor: pointer;
+      text-align: left;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+      box-shadow: 0 10px 24px rgba(11, 58, 130, 0.18);
+    }
+
+    .action-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .action-btn:active {
+      transform: translateY(0);
+      opacity: 0.96;
+    }
+
+    .action-main {
+      background: linear-gradient(135deg, #11479a 0%, #0b3a82 55%, #082d63 100%);
+    }
+
+    .action-alert {
+      background: linear-gradient(135deg, #c38d10 0%, #a87900 48%, #7d5a00 100%);
+    }
+
+    .btn-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .btn-icon {
+      width: 46px;
+      height: 46px;
+      min-width: 46px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.14);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.12);
+    }
+
+    .btn-text {
+      flex: 1;
+    }
+
+    .btn-title {
+      font-size: 17px;
+      font-weight: 800;
+      line-height: 1.35;
+      margin: 0 0 4px;
+    }
+
+    .btn-desc {
+      font-size: 13px;
+      line-height: 1.5;
+      margin: 0;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .footer {
+      margin-top: 20px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: linear-gradient(180deg, rgba(11, 58, 130, 0.05), rgba(212, 175, 55, 0.08));
+      border: 1px solid rgba(11, 58, 130, 0.06);
+      color: var(--muted);
+      font-size: 12.5px;
+      line-height: 1.6;
+      text-align: center;
+    }
+
+    .loading {
+      display: none;
+      text-align: center;
+      margin-top: 18px;
+      color: var(--police-blue);
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .loading.show {
+      display: block;
+    }
+
+    .spinner {
+      width: 18px;
+      height: 18px;
+      border: 3px solid rgba(11, 58, 130, 0.2);
+      border-top-color: var(--police-blue);
+      border-radius: 50%;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 8px;
+      animation: spin 0.85s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 420px) {
+      .content {
+        padding: 24px 16px 20px;
+      }
+
+      .title {
+        font-size: 20px;
+      }
+
+      .btn-title {
+        font-size: 16px;
+      }
+
+      .btn-desc {
+        font-size: 12.5px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <div class="top-bar"></div>
+
+      <div class="content">
+        <div class="seal">🚓</div>
+
+        <h1 class="title">Цахим мэдээлэл хүлээн авах хэсэг</h1>
+        <p class="subtitle">
+          Та доорх үйлчилгээний төрлөөс сонгон мэдээллээ цахимаар илгээнэ үү.
+        </p>
+
+        <div class="divider"></div>
+
+        <div class="button-group">
+          <button class="action-btn action-main" onclick="openTally('feedback')">
+            <div class="btn-row">
+              <div class="btn-icon">📝</div>
+              <div class="btn-text">
+                <div class="btn-title">Санал, хүсэлт илгээх</div>
+                <p class="btn-desc">
+                  Үйл ажиллагааг сайжруулах санал, хүсэлт, мэдээллээ илгээнэ үү.
+                </p>
+              </div>
+            </div>
+          </button>
+
+          <button class="action-btn action-alert" onclick="openTally('scam')">
+            <div class="btn-row">
+              <div class="btn-icon">⚠️</div>
+              <div class="btn-text">
+                <div class="btn-title">Залилах гэмт хэргийн мэдээлэл өгөх</div>
+                <p class="btn-desc">
+                  Залилах шинжтэй үйлдэл, сэжигтэй мэдээллийг ирүүлнэ үү.
+                </p>
+              </div>
+            </div>
+          </button>
+        </div>
+
+        <div id="loading" class="loading">
+          <span class="spinner"></span>Мэдээллийн хуудсыг нээж байна...
+        </div>
+
+        <div class="footer">
+          Ирүүлсэн мэдээллийг холбогдох журмын дагуу хүлээн авч, судлан шалгана.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const TALLY_URLS = {
+      feedback: "https://tally.so/r/kd5rAr",
+      scam: "https://tally.so/r/0QLA1y"
+    };
+
+    function getTelegramUser() {
+      const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
+
+      if (tg) {
+        try {
+          tg.ready();
+          tg.expand();
+        } catch (e) {}
+      }
+
+      const user = tg?.initDataUnsafe?.user || null;
+
+      return {
+        telegramId: user?.id || "",
+        username: user?.username || "",
+        fullName: `${user?.first_name || ""} ${user?.last_name || ""}`.trim()
+      };
+    }
+
+    function openTally(type) {
+      const loading = document.getElementById("loading");
+      loading.classList.add("show");
+
+      const baseUrl = TALLY_URLS[type];
+      if (!baseUrl) {
+        alert("Холбоос олдсонгүй.");
+        loading.classList.remove("show");
+        return;
+      }
+
+      const { telegramId, username, fullName } = getTelegramUser();
+
+      const params = new URLSearchParams({
+        telegram_id: telegramId,
+        telegram_username: username,
+        full_name: fullName
+      });
+
+      window.location.href = `${baseUrl}?${params.toString()}`;
+    }
+  </script>
+</body>
+</html>
